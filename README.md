@@ -16,3 +16,7 @@ React Application 프로젝트별 구성
 
 2020/01/31
 1. 리덕스
+
+2020/02/02
+1. React-Native 타이머 앱 구현
+2. Redux 구현
