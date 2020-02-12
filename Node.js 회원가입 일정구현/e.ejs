@@ -57,15 +57,23 @@
             text-decoration: none;
             cursor: pointer;
         }
-
+        #logout{
+            display: inline;
+        }
     </style>
 </head>
 <body>
     <form action="/name/delete" method="post">
         안녕하세요 <%= (name) %>님
-        <input type="hidden" name = "name1" value = '<%=(name)%>' />
+        <input type="hidden" id = "a"name = "name1" value = '<%=(name)%>' />
         <button>회원탈퇴</button>
     </form>
+
+  
+        <form id= "logout" action="/">
+            <button>로그아웃</button>
+        </form>
+
     <table>
         <tr class ="a">
             <td>월</td> <td>화</td> <td>수</td> <td>목</td> <td>금</td> <td>토</td> <td>일</td>
@@ -140,7 +148,7 @@
       </div>
  
     </div>
-
+    
 
     <script>
     
@@ -219,8 +227,28 @@
         modal.style.display = "block";
         document.getElementById('days').value = '일';
       }
-     
-      
+      if($(event.target).parents('td').attr('id')){
+        console.log($(event.target).parents('td').attr('id'));
+        if(confirm('정말삭제하시겠습니까?')){
+            $.ajax(
+                 { type: "POST",
+                    url: '/name/deleteList', 
+                    data: {
+                     id : $('#a').val(),
+                     day : $(event.target).parents('td').attr('id'),
+                     todo : $(event.target).text(),
+               }, 
+               success: function(){
+                   alert('입력성공!!');
+               }, 
+            });
+        $(event.target).remove();
+        }
+        else{
+            alert('취소하였습니다.')
+        }
+      }
+
       if (event.target == modal) {
          modal.style.display = "none";
      }

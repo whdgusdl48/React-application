@@ -109,6 +109,47 @@ app.post('/name/addList',function(req,res){
         console.log('추가성공');
     })
 })
+
+app.post('/name/deleteList',function(req,res){
+    var day = req.body.day;
+    var todo = req.body.todo;
+    var id = req.body.id;
+   
+    
+    switch (day) {
+        case 'Mon':
+            day = '월';
+            break;
+        case 'Tue':
+             day = '화';
+             break;
+        case 'Wen':
+             day = '수';
+             break;
+        case 'Tur':
+             day = '목';
+             break;
+        case 'Fri':
+             day = '금';
+             break;
+        case 'Sat':
+             day = '토';
+             break;
+        case 'Sun':
+             day = '일';
+            break;
+        default:
+            break;
+    }
+    console.log(day,todo,id);
+
+    var sql11 = `delete from ${id} where day='${day}' and todo='${todo}'`;
+    connection.query(sql11,function(err,row,field){
+        if(err) throw err;
+        console.log('제거성공');   
+    })
+    
+})
 app.post('/find/findPass/success',function(req,res){
     var id = req.body.id;
     var pass;
