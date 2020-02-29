@@ -1,6 +1,9 @@
 import React from 'react';
 import Seoul from './Seoul/Seoul';
 import Daejeon from './DaeJeon/Daejeon';
+import Daegu from './Daegu/Daegu';
+import Busan from './Busan/Busan';
+import Gwangjoo from './Gwangjoo/Gwangjoo';
 class Corona extends React.Component{
     callList = () => {
         if(this.props.list == '서울'){
@@ -12,6 +15,15 @@ class Corona extends React.Component{
             return(
                 <Daejeon />
             )
+        }
+        else if(this.props.list == '대구'){
+            return(<Daegu />)
+        }
+        else if(this.props.list == '부산'){
+            return(<Busan />)
+        }
+        else if(this.props.list == '광주'){
+            return(<Gwangjoo />)
         }
     }
     render(){
