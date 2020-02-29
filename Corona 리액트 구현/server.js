@@ -37,6 +37,144 @@ app.get('/api/Seoul2',(req,res) => {
   })
 
 });
+app.get('/api/Gwangjoo',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("https://www.gwangju.go.kr/"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("body > table > tbody > tr");
+  
+    $bodyList.each(function(i, elem) {
+      if(i % 2 == 1){
+      
+    }else{
+      ulList[i] = {
+        확진자번호 : $(this).find(`td:nth-child(1)`).text(),
+        인적사항 : $(this).find('th').text(),
+        확진경위 : $(this).find('td:nth-child(3)').text(),
+        확진일 : $(this).find('td:nth-child(4)').text(),
+        접촉 : $(this).find('td:nth-child(5)').text(),
+        격리시설 : $(this).find('td:nth-child()').text(),
+    };
+    }
+    
+    });
+
+    const data = ulList.filter(n => n.확진자번호);
+    res.send(data)
+  })
+
+});
+ 
+app.get('/api/Ulsan',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("http://www.ulsan.go.kr/corona.jsp#con"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    let ulList2 = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#patient4");
+   
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+        인적사항 : $(this).find('td:nth-child(1)').text(),
+        감염경로 : $(this).find('td.name').text(),
+        접촉 : $(this).find('td:nth-child(3)').text(),
+        격리시설 : $(this).find('td:nth-child(4)').text(),
+    };
+    });
+    
+    const $bodyList2 = $('#patients > tbody > tr');
+    $bodyList2.each(function(i,elem){
+      ulList2[i] = {
+        경로 : $(this).find('td > h4').text(),
+      }
+    })
+    const data = ulList.filter(n => n.인적사항);
+    const data2 = ulList2.filter(n => n.경로);
+
+    console.log(data2[1].경로);
+    
+    res.send(data)
+  })
+
+});
+app.get('/api/Busan1',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("http://www.busan.go.kr/corona/index.jsp"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+ 
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $(" #contents > div > div.list_body > ul");
+
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+          인적사항 : $(this).find('li:nth-child(1) > span').text(),
+          감염경로 : $(this).find('li:nth-child(2) > span').text(),
+          접촉 : $(this).find('li:nth-child(3) > span').text(),
+          격리시설 : $(this).find('li:nth-child(4) > span').text(),
+      };
+    });
+
+    const data = ulList.filter(n => n.인적사항);
+    res.send(data)
+  })
+
+});
+
+app.get('/api/Busan2',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("http://www.busan.go.kr/corona/index.jsp"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+    
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#header > div > div.main_banner > div > div");
+
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+          확진자 : $(this).find('span.item2').text(),
+          추가확진자 : $(this).find('span.item3').text(),
+          격리해제 : $(this).find('span.item4').text(),
+      };
+    });
+
+    const data = ulList.filter(n => n.확진자);
+    res.send(data)
+  })
+
+});
 
 app.get('/api/Daejeon',(req,res) => {
   res.send([{
@@ -159,7 +297,6 @@ app.get('/api/Daejeon2',(req,res) => {
     });
 
     const data = ulList.filter(n => n.확진자);
-    console.log(data)
     res.send(data);
   })
 });
