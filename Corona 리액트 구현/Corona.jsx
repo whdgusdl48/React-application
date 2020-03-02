@@ -4,17 +4,19 @@ import Daejeon from './DaeJeon/Daejeon';
 import Daegu from './Daegu/Daegu';
 import Busan from './Busan/Busan';
 import Gwangjoo from './Gwangjoo/Gwangjoo';
+import Ulsan from './Ulsan/Ulsan';
+import Incheon from './Incheon/Incheon';
+import CoronaExplain from './CoronaExplain';
+import CoronaSym from './CoronaSym';
+import CoronaCop from './CoronaCop';
+import WorldCorona from './WorldCorona';
 class Corona extends React.Component{
     callList = () => {
         if(this.props.list == '서울'){
-            return(
-                <Seoul />
-            )
+            return(<Seoul />)
         }
         else if(this.props.list == '대전'){
-            return(
-                <Daejeon />
-            )
+            return(<Daejeon />)
         }
         else if(this.props.list == '대구'){
             return(<Daegu />)
@@ -25,9 +27,27 @@ class Corona extends React.Component{
         else if(this.props.list == '광주'){
             return(<Gwangjoo />)
         }
+        else if(this.props.list == '울산'){
+            return(<Ulsan />)
+        }
+        else if(this.props.list == '인천'){
+            return(<Incheon />)
+        }
+        else if(this.props.list == '코로나란?'){
+            return(<CoronaExplain />)
+        }
+        else if(this.props.list == '코로나 증상'){
+            return(<CoronaSym />)
+        }
+        else if(this.props.list == '코로나 대처'){
+            return(<CoronaCop />)
+        }
+        else if(this.props.list == '세계 코로나 발병 현황'){
+            return(<WorldCorona />)
+        }
     }
     render(){
-        const {explain,list,seoul,daegu,daejeon,busan,ulsan,incheon,gwangju,kyunggi,kangwon,chungchung,jeonna,kyungsang,corona,corona_cop,corona_sym,world} = this.props;
+        const {seoul,daegu,daejeon,busan,ulsan,incheon,gwangju,kyunggi,kangwon,chungchung,jeonna,kyungsang,corona,corona_cop,corona_sym,world} = this.props;
         return(
             <div>
                 <div>

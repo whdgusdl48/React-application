@@ -1,0 +1,15 @@
+.navi-control {
+    position: absolute;
+    right: 1;
+    }
+
+    .btn-marker {
+        background: url('./marker2.png') no-repeat center / contain;
+        width: 22px;
+        height: 35px;
+        border: none;
+        }
+        .btn-marker:focus {
+        outline: transparent;
+        }
+        
