@@ -15,14 +15,14 @@ cell_long: {
     },
 });
 const UlsanList = ({list,number,classes}) => {
-    
+
     return (
         <TableRow>
             <TableCell className={classes.cell_short}>{list.감염경로}</TableCell>
             <TableCell className={classes.cell_short}>{list.인적사항}</TableCell>
             <TableCell className={classes.cell_short}>{list.감염경로}</TableCell>
             <TableCell className={classes.cell_short}>{list.접촉}</TableCell>
-            <TableCell>{number.경로}</TableCell>
+            <TableCell >{number.경로}</TableCell>
         </TableRow>
     )
 }

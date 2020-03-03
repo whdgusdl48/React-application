@@ -1,0 +1,9 @@
+.material-icons {
+    background: url('baseline_cancel_black_18dp.png') no-repeat center / contain;
+    width: 22px;
+    height: 35px;
+    border: none;
+    }
+    .btn-marker:focus {
+    outline: transparent;
+    }
