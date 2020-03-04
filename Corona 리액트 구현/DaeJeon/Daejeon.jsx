@@ -61,15 +61,17 @@ class DaeJeon extends Component{
                     <br/>
                     <a href="https://www.daejeon.go.kr/corona19/index.do?tab=2">대전광역시 이동경로 파악하기</a>
                     <br />
-                    {'크롤링 데이터 불가 수작업 진행중'}
                 </div>
                 <Paper className={classes.root}>
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>번호</TableCell>
-                                <TableCell>환자</TableCell>
-                                <TableCell>확진일</TableCell>
+                                <TableCell>질본번호</TableCell>
+                                <TableCell>확진일자</TableCell>
+                                <TableCell>성별</TableCell>
+                                <TableCell>거주지</TableCell>
+                                <TableCell>접촉력</TableCell>
                                 <TableCell>조치사항</TableCell>
                             </TableRow>
                         </TableHead>

@@ -6,6 +6,7 @@ import Busan from './Busan/Busan';
 import Gwangjoo from './Gwangjoo/Gwangjoo';
 import Ulsan from './Ulsan/Ulsan';
 import Incheon from './Incheon/Incheon';
+import KyungKi from './KyungKi/KyungKi';
 import CoronaExplain from './CoronaExplain';
 import CoronaSym from './CoronaSym';
 import CoronaCop from './CoronaCop';
@@ -77,6 +78,9 @@ class Corona extends React.Component {
         else if (this.props.list == '세계 코로나 발병 현황') {
             return (<WorldCorona />)
         }
+        else if (this.props.list == '경기도'){
+            return (<KyungKi />)
+        }
     }
     render() {
         const { seoul, daegu, daejeon, busan, ulsan, incheon, gwangju, kyunggi, kangwon, chungchung, jeonna, kyungsang, corona, corona_cop, corona_sym, world, classes } = this.props;
@@ -89,7 +93,7 @@ class Corona extends React.Component {
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
                             코로나바이러스(COVID-19)
-          </Typography>
+                         </Typography>
                         <Button color="inherit">Created By Beak</Button>
                     </Toolbar>
                 </AppBar>
@@ -144,8 +148,6 @@ class Corona extends React.Component {
                     </ListItem>
 
                 </List>
-                <br />
-                <br />
                 <div>
                     {this.callList()}
                 </div>

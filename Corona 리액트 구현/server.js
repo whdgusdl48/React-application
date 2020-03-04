@@ -73,7 +73,76 @@ app.get('/api/Gwangjoo',(req,res) => {
   })
 
 });
- 
+
+app.get('/api/Ulsan3',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("http://www.ulsan.go.kr/corona.jsp#con"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#patients2 > tbody > tr");
+   
+    $bodyList.each(function(i, elem) {
+         ulList[i] = {
+           확진자 : $(this).find('td:nth-child(1)').text(),
+           격리중 : $(this).find('td:nth-child(2)').text(),
+           격리해제 : $(this).find('td:nth-child(3)').text(),
+           감시해제 : $(this).find('td:nth-child(5)').text(),
+           검사중 : $(this).find('td:nth-child(6)').text(),
+         }
+    });
+    const data = ulList.filter(n => n.확진자);  
+    res.send(data)
+  })
+});
+
+app.get('/api/Ulsan2',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("http://www.ulsan.go.kr/corona.jsp#con"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#patients > tbody > tr");
+   
+    $bodyList.each(function(i, elem) {
+        if($(this).find('td > ul > li').text() !== ''){
+          ulList[i] = {
+            경로 : $(this).find('td > ul > li').text(),
+          }
+        }
+        else if($(this).find('td > h4').text() !== ''){
+          ulList[i] = {
+            경로 : '확인중'
+          }
+        }
+        else{
+          ulList[i] = {
+            경로 : $(this).find('td > ul > li').text(),
+          }
+        }
+         
+    });
+    const data = ulList.filter(n => n.경로);  
+    res.send(data)
+})
+});
+
 app.get('/api/Ulsan',(req,res) => {
   const getHtml = async () => {
     try {
@@ -87,34 +156,25 @@ app.get('/api/Ulsan',(req,res) => {
   getHtml()
   .then(html => {
     let ulList = [];
-    let ulList2 = [];
     const $ = cheerio.load(html.data);
     const $bodyList = $("#patient4");
-   
-    $bodyList.each(function(i, elem) {
-      ulList[i] = {
-        인적사항 : $(this).find('td:nth-child(1)').text(),
-        감염경로 : $(this).find('td.name').text(),
-        접촉 : $(this).find('td:nth-child(3)').text(),
-        격리시설 : $(this).find('td:nth-child(4)').text(),
-    };
-    });
-    
-    const $bodyList2 = $('#patients > tbody > tr');
-    $bodyList2.each(function(i,elem){
-      ulList2[i] = {
-        경로 : $(this).find('td > h4').text(),
-      }
-    })
-    const data = ulList.filter(n => n.인적사항);
-    const data2 = ulList2.filter(n => n.경로);
 
-    console.log(data2[1].경로);
-    
+    $bodyList.each(function(i, elem) {
+        ulList[i] = {
+          인적사항 : $(this).find('td:nth-child(1)').text(),
+          감염경로 : $(this).find('td.name').text(),
+          접촉 : $(this).find('td:nth-child(3)').text(),
+          격리시설 : $(this).find('td:nth-child(4)').text(),
+          번호 : i,
+        }   
+    });
+
+    const data = ulList.filter(n => n.인적사항)  
     res.send(data)
   })
 
 });
+
 app.get('/api/Busan1',(req,res) => {
   const getHtml = async () => {
     try {
@@ -124,12 +184,11 @@ app.get('/api/Busan1',(req,res) => {
       console.error(error);
     }
   };
- 
   getHtml()
   .then(html => {
     let ulList = [];
     const $ = cheerio.load(html.data);
-    const $bodyList = $(" #contents > div > div.list_body > ul");
+    const $bodyList = $("#contents > div:nth-child(1) > div > div.list_body > ul");
 
     $bodyList.each(function(i, elem) {
       ulList[i] = {
@@ -176,101 +235,132 @@ app.get('/api/Busan2',(req,res) => {
 
 });
 
-app.get('/api/Daejeon',(req,res) => {
+app.get('/api/Incheon',(req,res) => {
   res.send([{
-      'id': 1,
-      'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-      'name': '1번확진자',
-      'date': '2/21',
-      '조치사항': '동선 방역조치 완료'
+    'id': 1,
+    '환자번호': '#2641',
+    '성별나이': '남/44세',
+    'date': '확인중',
+    '주요증상' : '',
+    '퇴원' : '',
+    '비고': '대구방문'
+    },
+    {
+      'id': 2,
+      '환자번호': '#2592',
+      '성별나이': '남/64세',
+      'date': '확인중',
+      '주요증상' : '',
+      '퇴원' : '',
+      '비고': '서울에서 확진자 접촉'
       },
-      {
-        'id': 2,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '2번확진자',
-        'date': '2/22',
-        '조치사항': '동선 방역조치 완료'
-        },
-      {
-        'id': 3,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '3번확진자',
-        'date': '2/23',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 4,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '4번확진자',
-        'date': '2/26',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 5,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '5번확진자',
-        'date': '2/26',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 6,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '6번확진자',
-        'date': '2/26',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 7,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '7번확진자',
-        'date': '2/26',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 8,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '8번확진자',
-        'date': '2/26',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 9,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '9번확진자',
-        'date': '2/26',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 10,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '10번확진자',
-        'date': '2/27',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 11,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '11번확진자',
-        'date': '2/28',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 12,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '6번확진자',
-        'date': '2/28',
-        '조치사항': '동선 방역조치 완료'
-      },
-      {
-        'id': 13,
-        'link': 'https://www.daejeon.go.kr/corona19/index.do?tab=2',
-        'name': '6번확진자',
-        'date': '2/28',
-        '조치사항': '동선 방역조치 완료'
-      },
-  ])
-})
+    {
+      'id': 3,
+      '환자번호': '#2021',
+      '성별나이': '여/28세',
+      'date': '20.02.21(금)',
+      '주요증상' : '발열',
+      '퇴원' : '',
+      '비고': '서울 중구 의류회사 근무'
+    },
+    {
+    'id': 4,
+    '환자번호': '#1129',
+    '성별나이': '남/57세',
+    'date': '20.01.31(금)',
+    '주요증상' : '인후통 가래 기침',
+    '퇴원' : '',
+    '비고': ''
+    },
+    {
+      'id': 6,
+      '환자번호': '#398',
+      '성별나이': '여/60세',
+      'date': '20.02.21(금)',
+      '주요증상' : '미열',
+      '퇴원' : '',
+      '비고': '신천지 대구교회 방문'
+    },
+    {
+      'id': 6,
+      '환자번호': '#1',
+      '성별나이': '여/35세',
+      'date': '20.01.18(토)',
+      '주요증상' : '발열,오한,근육통',
+      '퇴원' : '20.02.06',
+      '비고': '중국인,우한시 거주 인천공항 환승객'
+    },
+    
+])
+});
 
+app.get('/api/World1',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("http://ncov.mohw.go.kr/bdBoardList_Real.do?brdId=1&brdGubun=11&ncvContSeq=&contSeq=&board_id=&gubun="); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#content > div > div.bv_content > div > div > div.data_table.mgt16 > table > tbody > tr");
+    
+    $bodyList.each(function(i, elem) {
+      if($(this).find('td:nth-child(3)').text() != ""){
+        ulList[i] = {
+          name : $(this).find('td.w_bold').text(),
+          number : $(this).find('td:nth-child(3)').text()
+        }
+      }
+      else{
+        ulList[i] = {
+          name : $(this).find('td.w_bold').text(),
+          number : $(this).find('td:nth-child(2)').text()
+        }
+      }
+    });
+
+    const data = ulList.filter(n => n.name);   
+    res.send(data)
+  })
+})
+app.get('/api/Daejeon',(req,res) => {
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("https://www.daejeon.go.kr/corona19/index.do?tab=2&subTab=2"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#contBox > div.blog_borad > div.story_view > div > div:nth-child(1) > div > table > tbody > tr");
+
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+        번호 : $(this).find('td:nth-child(1)').text(),
+        질본번호 : $(this).find('td:nth-child(2)').text(),
+        확진일자 : $(this).find('td:nth-child(3)').text(),
+        성별 : $(this).find('td:nth-child(4)').text(),
+        거주지 : $(this).find('td:nth-child(5)').text(),
+        접촉력 : $(this).find('td:nth-child(6)').text(),
+        조치사항 : $(this).find('td:nth-child(7)').text(),
+      }
+    });
+
+    const data = ulList.filter(n => n.번호);   
+    res.send(data)
+  })
+})
 app.get('/api/Daejeon2',(req,res) => {
 
   const getHtml = async () => {
@@ -288,11 +378,11 @@ app.get('/api/Daejeon2',(req,res) => {
     const $bodyList = $("#contBox > div:nth-child(2) > div > ul");
     $bodyList.each(function(i, elem) {
       ulList[i] = {
-          확진자: $(this).find('li.tab-1 > div.txt > strong').text(),
+          확진자: $(this).find('li.tab-1 > div.txt2 > span:nth-child(7) > strong').text(),
           검사중 : $(this).find('li:nth-child(2) > div.txt > span:nth-child(3) > strong').text(),
           격리중 : $(this).find('li:nth-child(3) > div.txt > span:nth-child(3) > strong').text(),
-          격리해제 :  $(this).find('li:nth-child(3) > div.txt > span:nth-child(4) > strong').text(),
-          사망자 : $(this).find('li.tab-3 > div.txt > strong').text(),
+          격리해제 :  $(this).find('li.tab-1 > div.txt2 > span:nth-child(6) > strong').text(),
+          사망자 : $(this).find('li.tab-1 > div.txt2 > span:nth-child(8) > strong').text(),
       };
     });
 
@@ -336,4 +426,65 @@ app.get('/api/Seoul1', (req, res) => {
         
 })
 
+app.get('/api/Kyungki',(req,res) => {
+
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("https://www.gg.go.kr/bbs/boardView.do?bsIdx=464&bIdx=2296956&menuId=1535"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#quick3 > div > div:nth-child(3) > div > div > table > tbody > tr");
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+          번호: $(this).find('td:nth-child(1)').text(),
+          확진자 : $(this).find('td:nth-child(2)').text(),
+          성별: $(this).find('td:nth-child(3)').text(),
+          출생연도: $(this).find('td:nth-child(4)').text(),
+          확진일자: $(this).find('td:nth-child(5)').text(),
+          퇴원: $(this).find('td:nth-child(6)').text(),
+          지역: $(this).find('td:nth-child(7)').text(),     
+      };
+    });
+
+    const data = ulList.filter(n => n.확진자);
+    res.send(data);
+  })
+});
+
+app.get('/api/Kyungki2',(req,res) => {
+   
+  const getHtml = async () => {
+    try {
+      const a = await axios.get("https://www.gg.go.kr/bbs/boardView.do?bsIdx=464&bIdx=2296956&menuId=1535"); 
+      return a;  
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  getHtml()
+  .then(html => {
+    let ulList = [];
+    const $ = cheerio.load(html.data);
+    const $bodyList = $("#quick3 > div > div.dashBoard > div.countWrap > ul:nth-child(2)");
+    $bodyList.each(function(i, elem) {
+      ulList[i] = {
+          입원환자: $(this).find('li:nth-child(1) > strong').text(),
+          퇴원자 : $(this).find('li:nth-child(2) > strong').text(),
+          사망자: $(this).find('li:nth-child(3) > strong').text(),
+      };
+    });
+
+    const data = ulList.filter(n => n.입원환자);
+    res.send(data);
+  })
+});
 app.listen(port, () => console.log(`Listening on port ${port}`));
